@@ -1,0 +1,12 @@
+﻿// vs folders
+.vs/
+bin/
+obj/
+packages/
+
+// vs files
+*.csproj.*
+*.xproj.*
+*.lock.*
+*.sln
+.bowerrc
