@@ -4,6 +4,9 @@ bin/
 obj/
 packages/
 
+// nodejs folders
+node_modules/
+
 // vs files
 *.csproj.*
 *.xproj.*
