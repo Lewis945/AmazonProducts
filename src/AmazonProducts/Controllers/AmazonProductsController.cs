@@ -1,4 +1,5 @@
 ﻿using AmazonProducts.Configuration;
+using AmazonProducts.Models;
 using AmazonProducts.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace AmazonProducts.Controllers
 {
+    [Route("api/[controller]")]
     public class AmazonProductsController : Controller
     {
         private AppSettings _setting;
@@ -26,7 +28,7 @@ namespace AmazonProducts.Controllers
             string awsAccessKeyId = _setting.AccessKeyId;
             string awsSecretKey = _setting.SecretAccessKey;
 
-            var keywords = "wcf";
+            string keywords = "wcf";
             string responseJson = string.Empty;
 
             if (string.IsNullOrEmpty(keywords))
@@ -35,7 +37,7 @@ namespace AmazonProducts.Controllers
             }
             else
             {
-                using (AmazonApiHelper apiHelper = new AmazonApiHelper(associateTag, awsAccessKeyId, awsSecretKey))
+                using (var apiHelper = new AmazonApiHelper(associateTag, awsAccessKeyId, awsSecretKey))
                 {
                     string requestUri = apiHelper.GetRequestUri(keywords);
                     try
@@ -61,6 +63,39 @@ namespace AmazonProducts.Controllers
             ViewBag.Products = products;
 
             return View();
+        }
+
+        [HttpGet("[action]")]
+        public async Task<AmazonResponse> Products(int startDateIndex)
+        {
+            string associateTag = _setting.AssociateTag;
+            string awsAccessKeyId = _setting.AccessKeyId;
+            string awsSecretKey = _setting.SecretAccessKey;
+
+            string keywords = "wcf";
+            string responseJson = string.Empty;
+
+            if (string.IsNullOrEmpty(keywords))
+            {
+                responseJson = AmazonApiHelper.GetEmptyResponseJson(string.Empty, string.Empty, HttpStatusCode.OK);
+            }
+            else
+            {
+                using (var apiHelper = new AmazonApiHelper(associateTag, awsAccessKeyId, awsSecretKey))
+                {
+                    string requestUri = apiHelper.GetRequestUri(keywords);
+                    try
+                    {
+                        responseJson = await apiHelper.ExecuteWebRequest(requestUri, keywords);
+                    }
+                    catch (Exception ex)
+                    {
+                        responseJson = AmazonApiHelper.GetEmptyResponseJson(keywords, ex.Message, HttpStatusCode.InternalServerError);
+                    }
+                }
+            }
+
+            return JsonConvert.DeserializeObject<AmazonResponse>(responseJson);
         }
     }
 }

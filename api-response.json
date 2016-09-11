@@ -1,0 +1,89 @@
+{
+  "keywords": "wcf",
+  "responseArray": [
+    {
+      "asin": "1491944838",
+      "productUrl": "http://www.amazon.com/Programming-WCF-Services-Maintainable-Service-Oriented/dp/1491944838%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1491944838",
+      "productImgUrl": "http://ecx.images-amazon.com/images/I/51uuEu8oveL._SL160_.jpg",
+      "title": "Programming WCF Services: Design and Build Maintainable Service-Oriented Systems",
+      "price": "$34.50",
+      "offersUrl": "http://www.amazon.com/gp/offer-listing/1491944838%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3D1491944838"
+    },
+    {
+      "asin": "1784391042",
+      "productUrl": "http://www.amazon.com/Multi-Layer-Services-Development-Entity-Framework/dp/1784391042%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1784391042",
+      "productImgUrl": "http://ecx.images-amazon.com/images/I/51YACexXM8L._SL160_.jpg",
+      "title": "WCF Multi-Layer Services Development with Entity Framework, 4th Edition",
+      "price": "$33.49",
+      "offersUrl": "http://www.amazon.com/gp/offer-listing/1784391042%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3D1784391042"
+    },
+    {
+      "asin": "0596101627",
+      "productUrl": "http://www.amazon.com/Learning-Hands-Michele-Leroux-Bustamante/dp/0596101627%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D0596101627",
+      "productImgUrl": "http://ecx.images-amazon.com/images/I/51STY0IUdiL._SL160_.jpg",
+      "title": "Learning WCF: A Hands-on Guide",
+      "price": "$11.99",
+      "offersUrl": "http://www.amazon.com/gp/offer-listing/0596101627%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3D0596101627"
+    },
+    {
+      "asin": "1514261251",
+      "productUrl": "http://www.amazon.com/Pragmatic-WCF-Rahul-Sahay/dp/1514261251%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1514261251",
+      "productImgUrl": "http://ecx.images-amazon.com/images/I/51LvNqBoP0L._SL160_.jpg",
+      "title": "Pragmatic WCF",
+      "price": "$16.00",
+      "offersUrl": "http://www.amazon.com/gp/offer-listing/1514261251%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3D1514261251"
+    },
+    {
+      "asin": "0596805489",
+      "productUrl": "http://www.amazon.com/Programming-WCF-Services-Mastering-AppFabric/dp/0596805489%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D0596805489",
+      "productImgUrl": "http://ecx.images-amazon.com/images/I/515YlGrdTVL._SL160_.jpg",
+      "title": "Programming WCF Services: Mastering WCF and the Azure AppFabric Service Bus",
+      "price": "$15.67",
+      "offersUrl": "0"
+    },
+    {
+      "asin": "0596526997",
+      "productUrl": "http://www.amazon.com/Programming-WCF-Services-Juval-Lowy/dp/0596526997%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D0596526997",
+      "productImgUrl": "http://ecx.images-amazon.com/images/I/51L1eK8c3zL._SL160_.jpg",
+      "title": "Programming WCF Services",
+      "price": "$7.02",
+      "offersUrl": "0"
+    },
+    {
+      "asin": "0470563141",
+      "productUrl": "http://www.amazon.com/Professional-WCF-Windows-Communication-Foundation/dp/0470563141%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D0470563141",
+      "productImgUrl": "http://ecx.images-amazon.com/images/I/51ATyvVEZuL._SL160_.jpg",
+      "title": "Professional WCF 4: Windows Communication Foundation with .NET 4",
+      "price": "$9.98",
+      "offersUrl": "http://www.amazon.com/gp/offer-listing/0470563141%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3D0470563141"
+    },
+    {
+      "asin": "B008ESDEK8",
+      "productUrl": "http://www.amazon.com/WCF-02-Quality-Burning-Basic-Tealights/dp/B008ESDEK8%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB008ESDEK8",
+      "productImgUrl": "http://ecx.images-amazon.com/images/I/31nDWEXCNQL._SL160_.jpg",
+      "title": "Tag WCF-02 Set of 10 High Quality Long Burning Basic Tealights, White",
+      "price": "$4.95",
+      "offersUrl": "http://www.amazon.com/gp/offer-listing/B008ESDEK8%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB008ESDEK8"
+    },
+    {
+      "asin": "B00ON4ENMU",
+      "productUrl": "http://www.amazon.com/Banpresto-Dragon-Ball-Mega-WCF/dp/B00ON4ENMU%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00ON4ENMU",
+      "productImgUrl": "http://ecx.images-amazon.com/images/I/4145ebqSLoL._SL160_.jpg",
+      "title": "Banpresto Dragon Ball Z Mega WCF - 5.5\" Legendary Super Saiyan Broly",
+      "price": "$17.85",
+      "offersUrl": "http://www.amazon.com/gp/offer-listing/B00ON4ENMU%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3DB00ON4ENMU"
+    },
+    {
+      "asin": "1484213335",
+      "productUrl": "http://www.amazon.com/C-6-0-NET-4-6-Framework/dp/1484213335%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1484213335",
+      "productImgUrl": "http://ecx.images-amazon.com/images/I/51uK4WeN8QL._SL160_.jpg",
+      "title": "C# 6.0 and the .NET 4.6 Framework",
+      "price": "$32.33",
+      "offersUrl": "http://www.amazon.com/gp/offer-listing/1484213335%3FSubscriptionId%3DAKIAJRIDUPOCGIHTZLPA%26tag%3Damazonpro0fad-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D386001%26creativeASIN%3D1484213335"
+    }
+  ],
+  "statusDescription": "OK",
+  "statusCode": "OK",
+  "isError": false,
+  "isFromCache": false
+}
