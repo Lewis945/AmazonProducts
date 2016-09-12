@@ -3,9 +3,11 @@ import { Link } from 'react-router';
 import { provide } from 'redux-typed';
 import { ApplicationState }  from '../store';
 import * as AmazonProductsState from '../store/AmazonProducts';
+import { SelectControl } from './SelectControl';
 
 interface RouteParams {
     keywords: string;
+    currency: string;
     startDateIndex: string;
 }
 
@@ -45,8 +47,9 @@ class AmazonProducts extends React.Component<AmazonProductsProps, void> {
         let { location } = this.props as any;
         let { query } = location;
         let keywords = query.keywords || 'csharp';
+        let currency = query.currency || 'USD';
         let startDateIndex = parseInt(this.props.params.startDateIndex) || 0;
-        this.props.requestProducts(keywords, startDateIndex);
+        this.props.requestProducts(keywords, currency, startDateIndex);
     }
 
     componentWillReceiveProps(nextProps: AmazonProductsProps) {
@@ -56,15 +59,20 @@ class AmazonProducts extends React.Component<AmazonProductsProps, void> {
         let { location } = nextProps as any;
         let { query } = location;
         let keywords = query.keywords || 'csharp';
+        let currency = query.currency || 'USD';
         let startDateIndex = parseInt(nextProps.params.startDateIndex) || 0;
-        this.props.requestProducts(keywords, startDateIndex);
+        this.props.requestProducts(keywords, currency, startDateIndex);
     }
 
     public render() {
+
         return <div>
             <h1>Amazon products list</h1>
             <span>Keywords: </span> <span>{this.props.response.keywords} </span> <br/>
-            <span>Search: </span><input type="input" ref={(c) => this._keywordsInput = c}/> <a href="#" onClick={ (e) => { this.submitKeywords(); e.preventDefault(); } }>Save</a>
+            <span>Search: </span><input type="input" ref={(c) => this._keywordsInput = c}/> <a href="#" onClick={ (e) => { this.submitKeywords(); e.preventDefault(); } }>Search</a>
+
+            <SelectControl url="" onChange={(v) => this.submitCurrency(v) } defaultOptions={[{ name: "USD", value: "USD" }, { name: "EUR", value: "EUR" }]}/>
+
             { this.renderProductsTable() }
             { this.renderPagination() }
         </div>;
@@ -73,23 +81,25 @@ class AmazonProducts extends React.Component<AmazonProductsProps, void> {
     private submitKeywords() {
         let { router } = this.context as any;
         let router1 = router as IRouter;
-        console.log(this._keywordsInput.value);
-        router1.push({ pathname: '/amazon', query: { keywords: this._keywordsInput.value } });
 
-        //var http = new XMLHttpRequest();
-        //var url = "/api/amazonproducts/products";
-        //var params = "keywords=wcf&name=binny";
-        //http.open("POST", url, true);
+        let { location } = this.props as any;
+        let { query } = location;
 
-        ////Send the proper header information along with the request
-        //http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var q = Object.assign({}, query, { keywords: this._keywordsInput.value });
 
-        //http.onreadystatechange = function () {//Call a function when the state changes.
-        //    if (http.readyState == 4 && http.status == 200) {
-        //        alert(http.responseText);
-        //    }
-        //}
-        //http.send(params);
+        router1.push({ pathname: '/amazon', query: q});
+    }
+
+    private submitCurrency(value) {
+        let { router } = this.context as any;
+        let router1 = router as IRouter;
+
+        let { location } = this.props as any;
+        let { query } = location;
+
+        var q = Object.assign({}, query, { currency: value });
+
+        router1.push({ pathname: '/amazon', query: q });
     }
 
     private renderProductsTable() {

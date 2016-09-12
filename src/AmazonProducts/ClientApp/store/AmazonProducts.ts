@@ -9,6 +9,7 @@ export interface AmazonProductsState {
     isLoading: boolean;
     startDateIndex: number;
     keywords: string;
+    currency: string;
     response: AmazonResponse;
 }
 
@@ -48,14 +49,14 @@ const defaultResponse: AmazonResponse = {
 
 @typeName("REQUEST_AMAZON_PRODUCTS")
 class RequestAmazonProducts extends Action {
-    constructor(public keywords: string, public startDateIndex: number) {
+    constructor(public keywords: string, public currency: string, public startDateIndex: number) {
         super();
     }
 }
 
 @typeName("RECEIVE_AMAZON_PRODUCTS")
 class ReceiveAmazonProducts extends Action {
-    constructor(public keywords: string, public startDateIndex: number, public response: AmazonResponse) {
+    constructor(public keywords: string, public currency: string, public startDateIndex: number, public response: AmazonResponse) {
         super();
     }
 }
@@ -65,21 +66,17 @@ class ReceiveAmazonProducts extends Action {
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    requestProducts: (keywords: string, startDateIndex: number): ActionCreator => (dispatch, getState) => {
-
-        console.log(startDateIndex + '/' + getState().products.startDateIndex);
-        console.log(keywords + '/' + getState().products.keywords);
-
+    requestProducts: (keywords: string, currency: string, startDateIndex: number): ActionCreator => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
-        if (startDateIndex !== getState().products.startDateIndex || keywords != getState().products.keywords) {
-            let fetchTask = fetch(`/api/AmazonProducts/Products?keywords=${keywords}&startDateIndex=${startDateIndex}`)
+        if (startDateIndex !== getState().products.startDateIndex || keywords != getState().products.keywords || currency != getState().products.currency) {
+            let fetchTask = fetch(`/api/AmazonProducts/Products?keywords=${keywords}&currency=${currency}&startDateIndex=${startDateIndex}`)
                 .then(response => response.json())
                 .then((data: AmazonResponse) => {
-                    dispatch(new ReceiveAmazonProducts(keywords, startDateIndex, data));
+                    dispatch(new ReceiveAmazonProducts(keywords, currency, startDateIndex, data));
                 });
 
             addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
-            dispatch(new RequestAmazonProducts(keywords, startDateIndex));
+            dispatch(new RequestAmazonProducts(keywords, currency, startDateIndex));
         }
     }
 };
@@ -89,6 +86,7 @@ export const actionCreators = {
 const unloadedState: AmazonProductsState = {
     startDateIndex: null,
     keywords: null,
+    currency: null,
     response: defaultResponse,
     isLoading: false
 };
@@ -98,6 +96,7 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
         return {
             startDateIndex: action.startDateIndex,
             keywords: action.keywords,
+            currency: action.currency,
             isLoading: true,
             response: state.response
         };
@@ -108,6 +107,7 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
             return {
                 startDateIndex: action.startDateIndex,
                 keywords: action.keywords,
+                currency: action.currency,
                 response: action.response,
                 isLoading: false
             };

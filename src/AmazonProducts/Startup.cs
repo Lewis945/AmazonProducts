@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AmazonProducts.Configuration;
+using AmazonProducts.Utilities;
 
 namespace AmazonProducts
 {
@@ -33,6 +34,7 @@ namespace AmazonProducts
             // Add framework services.
             services.AddMvc();
 
+            services.AddSingleton<CurrencyHelper>();
             services.Configure<AppSettings>(Configuration.GetSection("Amazon"));
         }
 

@@ -14,16 +14,13 @@ namespace AmazonProducts.Utilities
 
         }
 
-        public async Task<string> CurrencyConversionAsync(decimal amount, string fromCurrency, string toCurrency)
+        public async Task<decimal> CurrencyConversionAsync(decimal amount, Currency fromCurrency, Currency toCurrency)
         {
-            string output = "";
-            const string fromCurrency1 = "USD";
-            const string toCurrency1 = "INR";
-            const double amount1 = 2000;
+            decimal output = 0;
 
             // Construct URL to query the Yahoo! Finance API
             const string urlPattern = "http://finance.yahoo.com/d/quotes.csv?s={0}{1}=X&f=l1";
-            string url = string.Format(urlPattern, fromCurrency1, toCurrency1);
+            string url = string.Format(urlPattern, fromCurrency.ToString(), toCurrency.ToString());
 
             string responseJson = null;
 
@@ -37,10 +34,10 @@ namespace AmazonProducts.Utilities
             }
 
             // Convert string to number
-            double exchangeRate = double.Parse(responseJson, System.Globalization.CultureInfo.InvariantCulture);
+            decimal exchangeRate = decimal.Parse(responseJson, System.Globalization.CultureInfo.InvariantCulture);
 
             // Output the result
-            output = (amount1 * exchangeRate).ToString();
+            output = amount * exchangeRate;
 
             return output;
         }
