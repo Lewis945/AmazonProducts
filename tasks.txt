@@ -1,6 +1,6 @@
 Test:
 • Make a website, that enables searching for products among Amazon products.
-• Using Amazon Product Advertising API (or REST ) services, get list of products from Amazon using search
+• Using Amazon Product Advertising API (or REST) services, get list of products from Amazon using search
 • Show results by 13 on one page, next page "preloaded"
 • Using currency calculator enable user choose currency and show results on that
 • Price/currency change realize with AJAX update, not full page load

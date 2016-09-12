@@ -1,13 +1,13 @@
 import { ActionCreatorGeneric } from 'redux-typed';
 import * as WeatherForecasts from './WeatherForecasts';
-import * as AmazonProducts from './AmazonProducts';
 import * as Counter from './Counter';
+import * as AmazonProducts from './AmazonProducts';
 
 // The top-level state object
 export interface ApplicationState {
     counter: Counter.CounterState,
-    weatherForecasts: WeatherForecasts.WeatherForecastsState,
-    products: AmazonProducts.AmazonProductsState,
+    weatherForecasts: WeatherForecasts.WeatherForecastsState
+    products: AmazonProducts.AmazonProductsState
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using

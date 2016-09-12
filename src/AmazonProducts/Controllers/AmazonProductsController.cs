@@ -22,57 +22,16 @@ namespace AmazonProducts.Controllers
             _setting = settings.Value;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            string associateTag = _setting.AssociateTag;
-            string awsAccessKeyId = _setting.AccessKeyId;
-            string awsSecretKey = _setting.SecretAccessKey;
-
-            string keywords = "wcf";
-            string responseJson = string.Empty;
-
-            if (string.IsNullOrEmpty(keywords))
-            {
-                responseJson = AmazonApiHelper.GetEmptyResponseJson(string.Empty, string.Empty, HttpStatusCode.OK);
-            }
-            else
-            {
-                using (var apiHelper = new AmazonApiHelper(associateTag, awsAccessKeyId, awsSecretKey))
-                {
-                    string requestUri = apiHelper.GetRequestUri(keywords);
-                    try
-                    {
-                        responseJson = await apiHelper.ExecuteWebRequest(requestUri, keywords);
-                    }
-                    catch (Exception ex)
-                    {
-                        responseJson = AmazonApiHelper.GetEmptyResponseJson(keywords, ex.Message, HttpStatusCode.InternalServerError);
-                    }
-                }
-            }
-
-            dynamic stuff = JsonConvert.DeserializeObject(responseJson);
-
-            var products = new List<dynamic>();
-            foreach (var item in stuff.responseArray)
-            {
-                products.Add(item);
-            }
-
-            ViewBag.Keywords = stuff.keywords;
-            ViewBag.Products = products;
-
-            return View();
-        }
-
         [HttpGet("[action]")]
-        public async Task<AmazonResponse> Products(int startDateIndex)
+        public async Task<AmazonResponse> Products(string keywords = "wcf", int startDateIndex = 0)
         {
             string associateTag = _setting.AssociateTag;
             string awsAccessKeyId = _setting.AccessKeyId;
             string awsSecretKey = _setting.SecretAccessKey;
 
-            string keywords = "wcf";
+            var currencyHelper = new CurrencyHelper();
+            var converted = await currencyHelper.CurrencyConversionAsync(0, "USD", "EUR");
+
             string responseJson = string.Empty;
 
             if (string.IsNullOrEmpty(keywords))
