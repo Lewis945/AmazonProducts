@@ -7,7 +7,8 @@ import { ActionCreator } from './';
 
 export interface AmazonProductsState {
     isLoading: boolean;
-    startDateIndex: number;
+    page: number;
+    forward: number;
     keywords: string;
     currency: string;
     response: AmazonResponse;
@@ -50,14 +51,14 @@ const defaultResponse: AmazonResponse = {
 
 @typeName("REQUEST_AMAZON_PRODUCTS")
 class RequestAmazonProducts extends Action {
-    constructor(public keywords: string, public currency: string, public startDateIndex: number) {
+    constructor(public keywords: string, public currency: string, public page: number) {
         super();
     }
 }
 
 @typeName("RECEIVE_AMAZON_PRODUCTS")
 class ReceiveAmazonProducts extends Action {
-    constructor(public keywords: string, public currency: string, public startDateIndex: number, public response: AmazonResponse) {
+    constructor(public keywords: string, public currency: string, public page: number, public response: AmazonResponse) {
         super();
     }
 }
@@ -76,22 +77,29 @@ class ReceiveCurrencies extends Action {
     }
 }
 
+@typeName("CHANGE_PAGE")
+class ChangePage extends Action {
+    constructor(public page: number) {
+        super();
+    }
+}
+
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    requestProducts: (keywords: string, currency: string, startDateIndex: number): ActionCreator => (dispatch, getState) => {
+    requestProducts: (keywords: string, currency: string, page: number): ActionCreator => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
-        if (startDateIndex !== getState().products.startDateIndex || keywords != getState().products.keywords || currency != getState().products.currency) {
-            let fetchTask = fetch(`/api/amazonproducts/products?keywords=${keywords}&currency=${currency}&startDateIndex=${startDateIndex}`)
+        if (page !== getState().products.page || keywords != getState().products.keywords || currency != getState().products.currency) {
+            let fetchTask = fetch(`/api/amazonproducts/products?keywords=${keywords}&currency=${currency}&page=${page}`)
                 .then(response => response.json())
                 .then((data: AmazonResponse) => {
-                    dispatch(new ReceiveAmazonProducts(keywords, currency, startDateIndex, data));
+                    dispatch(new ReceiveAmazonProducts(keywords, currency, page, data));
                 });
 
             addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
-            dispatch(new RequestAmazonProducts(keywords, currency, startDateIndex));
+            dispatch(new RequestAmazonProducts(keywords, currency, page));
         }
     },
     requestCurrencies: (): ActionCreator => (dispatch, getState) => {
@@ -107,13 +115,20 @@ export const actionCreators = {
             addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
             dispatch(new RequestCurrencies());
         }
+    },
+    setPage: (page: number): ActionCreator => (dispatch, getState) => {
+        dispatch(new ChangePage(page));
+    },
+    goForward: (): ActionCreator => (dispatch, getState) => {
+        dispatch(new ChangePage(getState().products.page + 1));
     }
 };
 
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 const unloadedState: AmazonProductsState = {
-    startDateIndex: null,
+    page: 0,
+    forward: 0,
     keywords: null,
     currency: null,
     response: defaultResponse,
@@ -124,7 +139,8 @@ const unloadedState: AmazonProductsState = {
 export const reducer: Reducer<AmazonProductsState> = (state, action) => {
     if (isActionType(action, RequestAmazonProducts)) {
         return {
-            startDateIndex: action.startDateIndex,
+            page: action.page,
+            forward: state.forward,
             keywords: action.keywords,
             currency: action.currency,
             response: state.response,
@@ -134,19 +150,23 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
     } else if (isActionType(action, ReceiveAmazonProducts)) {
         // Only accept the incoming data if it matches the most recent request. This ensures we correctly
         // handle out-of-order responses.
-        if (action.startDateIndex === state.startDateIndex && action.currency == state.currency && action.keywords == state.keywords) {
+        if (action.page === state.page && action.currency == state.currency && action.keywords == state.keywords) {
+            var response = action.response;
+            response.responseArray = state.response.responseArray.concat(response.responseArray);
             return {
-                startDateIndex: action.startDateIndex,
+                page: action.page,
+                forward: state.forward,
                 keywords: action.keywords,
                 currency: action.currency,
-                response: action.response,
+                response: response,
                 currencies: state.currencies,
                 isLoading: false
             };
         }
     } else if (isActionType(action, RequestCurrencies)) {
         return {
-            startDateIndex: state.startDateIndex,
+            page: state.page,
+            forward: state.forward,
             keywords: state.keywords,
             currency: state.currency,
             response: state.response,
@@ -157,11 +177,24 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
         // Only accept the incoming data if it matches the most recent request. This ensures we correctly
         // handle out-of-order responses.
         return {
-            startDateIndex: state.startDateIndex,
+            page: state.page,
+            forward: state.forward,
             keywords: state.keywords,
             currency: state.currency,
             response: state.response,
             currencies: action.currencies,
+            isLoading: false
+        };
+    } else if (isActionType(action, ChangePage)) {
+        // Only accept the incoming data if it matches the most recent request. This ensures we correctly
+        // handle out-of-order responses.
+        return {
+            page: state.page,
+            forward: action.page,
+            keywords: state.keywords,
+            currency: state.currency,
+            response: state.response,
+            currencies: state.currencies,
             isLoading: false
         };
     }

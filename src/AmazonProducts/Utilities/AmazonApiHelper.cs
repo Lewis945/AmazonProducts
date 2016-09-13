@@ -21,7 +21,7 @@ namespace AmazonProducts.Utilities
         private const string qsSearchIndex = "All";
         private const string qsResponseGroup = "Images,ItemAttributes,Offers";
 
-        private const string canonicalQsFormat = "AWSAccessKeyId={2}&AssociateTag={3}&Keywords={5}&Operation={1}&ResponseGroup={6}&SearchIndex={4}&Service={0}&Timestamp={7}";
+        private const string canonicalQsFormat = "AWSAccessKeyId={2}&AssociateTag={3}&ItemPage={8}&Keywords={5}&Operation={1}&ResponseGroup={6}&SearchIndex={4}&Service={0}&Timestamp={7}";
 
         private const string dateFormat = "yyyy-MM-ddTHH:mm:ss.000Z";
         private const string stringToSignFormat = "GET\n{0}\n{1}\n{2}";
@@ -41,7 +41,7 @@ namespace AmazonProducts.Utilities
             AwsSecretKey = awsSecretKey;
         }
 
-        public string GetRequestUri(string keywords)
+        public string GetRequestUri(string keywords, int page = 1)
         {
             string qsKeywords = System.Net.WebUtility.UrlEncode(keywords);
             //string qsKeywords = HttpUtility.UrlPathEncode(keywords);
@@ -55,7 +55,8 @@ namespace AmazonProducts.Utilities
                                     qsSearchIndex,
                                     qsKeywords,
                                     qsResponseGroup.Replace(",", "%2C"),
-                                    qsTimestamp);
+                                    qsTimestamp,
+                                    page);
 
             string stringToSign = string.Format(stringToSignFormat, EndPoint, RequestUri, canonicalQs);
 

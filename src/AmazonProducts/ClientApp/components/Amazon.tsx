@@ -4,11 +4,12 @@ import { provide } from 'redux-typed';
 import { ApplicationState }  from '../store';
 import * as AmazonProductsState from '../store/AmazonProducts';
 import { SelectControl } from './SelectControl';
+import { ProductsList } from './ProductsList';
 
 interface RouteParams {
     keywords: string;
     currency: string;
-    startDateIndex: string;
+    page: string;
 }
 
 //---------------
@@ -25,12 +26,11 @@ interface IRouterContext {
 }
 
 interface ISomeOtherContext {
-    somethingElse: any;
 }
 
 //---------------
 
-class AmazonProducts extends React.Component<AmazonProductsProps, void> {
+class AmazonProducts extends React.Component<AmazonProductsProps, any> {
 
     context: IRouterContext & ISomeOtherContext;
 
@@ -46,8 +46,9 @@ class AmazonProducts extends React.Component<AmazonProductsProps, void> {
         let { query } = location;
         let keywords = query.keywords || 'csharp';
         let currency = query.currency || 'USD';
-        let startDateIndex = parseInt(this.props.params.startDateIndex) || 0;
-        this.props.requestProducts(keywords, currency, startDateIndex);
+        let page = parseInt(query.page) || 1;
+        this.props.setPage(page);
+        this.props.requestProducts(keywords, currency, page);
         this.props.requestCurrencies();
     }
 
@@ -57,8 +58,8 @@ class AmazonProducts extends React.Component<AmazonProductsProps, void> {
         let { query } = location;
         let keywords = query.keywords || 'csharp';
         let currency = query.currency || 'USD';
-        let startDateIndex = parseInt(nextProps.params.startDateIndex) || 0;
-        this.props.requestProducts(keywords, currency, startDateIndex);
+        let page = nextProps.forward;
+        this.props.requestProducts(keywords, currency, page);
         this.props.requestCurrencies();
     }
 
@@ -68,7 +69,7 @@ class AmazonProducts extends React.Component<AmazonProductsProps, void> {
             <span>Keywords: </span> <span>{this.props.response.keywords} </span> <br/>
             <span>Search: </span><input type="input" ref={(c) => this._keywordsInput = c}/> <a href="#" onClick={ (e) => { this.submitKeywords(); e.preventDefault(); } }>Search</a>
             <SelectControl onChange={(v) => this.submitCurrency(v) } options={this.props.currencies}/>
-            { this.renderProductsTable() }
+            <ProductsList page={this.props.page} forward={this.props.isLoading} onPageChanged={this.props.goForward} products={this.props.response.responseArray} />
             { this.renderPagination() }
         </div>;
     }
@@ -97,36 +98,9 @@ class AmazonProducts extends React.Component<AmazonProductsProps, void> {
         router1.push({ pathname: '/amazon', query: q });
     }
 
-    private renderProductsTable() {
-        return <table className='table'>
-            <thead>
-                <tr>
-                    <th>asin</th>
-                    <th>title</th>
-                    <th>productImgUrl</th>
-                    <th>productUrl</th>
-                    <th>price</th>
-                    <th>offersUrl</th>
-                </tr>
-            </thead>
-            <tbody>
-                {this.props.response.responseArray.map(product =>
-                    <tr key={ product.asin }>
-                        <td>{ product.asin }</td>
-                        <td>{ product.title }</td>
-                        <td><img src={ product.productImgUrl } alt={ product.title }/></td>
-                        <td><a href= { product.productUrl }>{ product.title }</a></td>
-                        <td>{ product.price }</td>
-                        <td><a href={ product.offersUrl }>{ product.title }</a></td>
-                    </tr>
-                ) }
-            </tbody>
-        </table>;
-    }
-
     private renderPagination() {
-        let prevStartDateIndex = this.props.startDateIndex - 5;
-        let nextStartDateIndex = this.props.startDateIndex + 5;
+        let prevStartDateIndex = this.props.page - 5;
+        let nextStartDateIndex = this.props.page + 5;
 
         return <p className='clearfix text-center'>
             <Link className='btn btn-default pull-left' to={ `/fetchdata/${prevStartDateIndex}` }>Previous</Link>

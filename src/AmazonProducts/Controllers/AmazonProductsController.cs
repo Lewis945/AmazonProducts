@@ -35,7 +35,7 @@ namespace AmazonProducts.Controllers
         #region Actions
 
         [HttpGet("[action]")]
-        public async Task<AmazonResponse> Products(string keywords, string currency, int startDateIndex = 0)
+        public async Task<AmazonResponse> Products(string keywords, string currency, int page = 1)
         {
             string associateTag = _setting.AssociateTag;
             string awsAccessKeyId = _setting.AccessKeyId;
@@ -51,7 +51,7 @@ namespace AmazonProducts.Controllers
             {
                 using (var apiHelper = new AmazonApiHelper(associateTag, awsAccessKeyId, awsSecretKey))
                 {
-                    string requestUri = apiHelper.GetRequestUri(keywords);
+                    string requestUri = apiHelper.GetRequestUri(keywords, page);
                     try
                     {
                         responseJson = await apiHelper.ExecuteWebRequest(requestUri, keywords);
