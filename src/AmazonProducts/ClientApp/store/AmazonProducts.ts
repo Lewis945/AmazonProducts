@@ -11,6 +11,7 @@ export interface AmazonProductsState {
     keywords: string;
     currency: string;
     response: AmazonResponse;
+    currencies: Array<{ value: string, name: string }>;
 }
 
 export interface AmazonResponse {
@@ -61,6 +62,20 @@ class ReceiveAmazonProducts extends Action {
     }
 }
 
+@typeName("REQUEST_CURRENCIES")
+class RequestCurrencies extends Action {
+    constructor() {
+        super();
+    }
+}
+
+@typeName("RECEIVE_CURRENCIES")
+class ReceiveCurrencies extends Action {
+    constructor(public currencies: Array<{ value: string, name: string }>) {
+        super();
+    }
+}
+
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
@@ -69,7 +84,7 @@ export const actionCreators = {
     requestProducts: (keywords: string, currency: string, startDateIndex: number): ActionCreator => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         if (startDateIndex !== getState().products.startDateIndex || keywords != getState().products.keywords || currency != getState().products.currency) {
-            let fetchTask = fetch(`/api/AmazonProducts/Products?keywords=${keywords}&currency=${currency}&startDateIndex=${startDateIndex}`)
+            let fetchTask = fetch(`/api/amazonproducts/products?keywords=${keywords}&currency=${currency}&startDateIndex=${startDateIndex}`)
                 .then(response => response.json())
                 .then((data: AmazonResponse) => {
                     dispatch(new ReceiveAmazonProducts(keywords, currency, startDateIndex, data));
@@ -77,6 +92,20 @@ export const actionCreators = {
 
             addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
             dispatch(new RequestAmazonProducts(keywords, currency, startDateIndex));
+        }
+    },
+    requestCurrencies: (): ActionCreator => (dispatch, getState) => {
+        if (getState().products.currencies.length == 0) {
+            let fetchTask = fetch(`/api/currency/list`)
+                .then(response => { return response.json() })
+                //.then(response => dispatch(new ReceiveCurrencies([{ name: "USD", value: "USD" }])));
+                .then((data: Array<{ value: string, name: string }>) => {
+                    //dispatch(new ReceiveCurrencies([{ name: "USD", value: "USD" }]));
+                    dispatch(new ReceiveCurrencies(data));
+                });
+
+            addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
+            dispatch(new RequestCurrencies());
         }
     }
 };
@@ -88,7 +117,8 @@ const unloadedState: AmazonProductsState = {
     keywords: null,
     currency: null,
     response: defaultResponse,
-    isLoading: false
+    isLoading: false,
+    currencies: []
 };
 
 export const reducer: Reducer<AmazonProductsState> = (state, action) => {
@@ -97,21 +127,43 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
             startDateIndex: action.startDateIndex,
             keywords: action.keywords,
             currency: action.currency,
-            isLoading: true,
-            response: state.response
+            response: state.response,
+            currencies: state.currencies,
+            isLoading: true
         };
     } else if (isActionType(action, ReceiveAmazonProducts)) {
         // Only accept the incoming data if it matches the most recent request. This ensures we correctly
         // handle out-of-order responses.
-        if (action.startDateIndex === state.startDateIndex) {
+        if (action.startDateIndex === state.startDateIndex && action.currency == state.currency && action.keywords == state.keywords) {
             return {
                 startDateIndex: action.startDateIndex,
                 keywords: action.keywords,
                 currency: action.currency,
                 response: action.response,
+                currencies: state.currencies,
                 isLoading: false
             };
         }
+    } else if (isActionType(action, RequestCurrencies)) {
+        return {
+            startDateIndex: state.startDateIndex,
+            keywords: state.keywords,
+            currency: state.currency,
+            response: state.response,
+            currencies: state.currencies,
+            isLoading: true
+        };
+    } else if (isActionType(action, ReceiveCurrencies)) {
+        // Only accept the incoming data if it matches the most recent request. This ensures we correctly
+        // handle out-of-order responses.
+        return {
+            startDateIndex: state.startDateIndex,
+            keywords: state.keywords,
+            currency: state.currency,
+            response: state.response,
+            currencies: action.currencies,
+            isLoading: false
+        };
     }
 
     // For unrecognized actions (or in cases where actions have no effect), must return the existing state

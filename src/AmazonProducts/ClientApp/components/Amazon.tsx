@@ -42,37 +42,32 @@ class AmazonProducts extends React.Component<AmazonProductsProps, void> {
 
     componentWillMount() {
         // This method runs when the component is first added to the page
-        console.log(1);
-        console.log(this.props);
         let { location } = this.props as any;
         let { query } = location;
         let keywords = query.keywords || 'csharp';
         let currency = query.currency || 'USD';
         let startDateIndex = parseInt(this.props.params.startDateIndex) || 0;
         this.props.requestProducts(keywords, currency, startDateIndex);
+        this.props.requestCurrencies();
     }
 
     componentWillReceiveProps(nextProps: AmazonProductsProps) {
         // This method runs when incoming props (e.g., route params) change
-        console.log(2);
-        console.log(nextProps);
         let { location } = nextProps as any;
         let { query } = location;
         let keywords = query.keywords || 'csharp';
         let currency = query.currency || 'USD';
         let startDateIndex = parseInt(nextProps.params.startDateIndex) || 0;
         this.props.requestProducts(keywords, currency, startDateIndex);
+        this.props.requestCurrencies();
     }
 
     public render() {
-
         return <div>
             <h1>Amazon products list</h1>
             <span>Keywords: </span> <span>{this.props.response.keywords} </span> <br/>
             <span>Search: </span><input type="input" ref={(c) => this._keywordsInput = c}/> <a href="#" onClick={ (e) => { this.submitKeywords(); e.preventDefault(); } }>Search</a>
-
-            <SelectControl url="" onChange={(v) => this.submitCurrency(v) } defaultOptions={[{ name: "USD", value: "USD" }, { name: "EUR", value: "EUR" }]}/>
-
+            <SelectControl onChange={(v) => this.submitCurrency(v) } options={this.props.currencies}/>
             { this.renderProductsTable() }
             { this.renderPagination() }
         </div>;
@@ -87,7 +82,7 @@ class AmazonProducts extends React.Component<AmazonProductsProps, void> {
 
         var q = Object.assign({}, query, { keywords: this._keywordsInput.value });
 
-        router1.push({ pathname: '/amazon', query: q});
+        router1.push({ pathname: '/amazon', query: q });
     }
 
     private submitCurrency(value) {
