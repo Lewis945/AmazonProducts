@@ -1,7 +1,6 @@
 ﻿import * as React from 'react';
 
 export interface IProductsListState {
-    loadingFlag: boolean;   //to avoid multiple fetch request if user is keep scrolling
 }
 
 export interface IProductsListProps extends React.Props<ProductsList> {
@@ -9,71 +8,45 @@ export interface IProductsListProps extends React.Props<ProductsList> {
     onPageChanged: () => void;
     page: number;
     forward: boolean;
+    isLoading: boolean;
 }
-
-var loading = function (action) {
-    // add the overlay with loading image to the page
-    //if (action == "on") {
-    //    var over = '<div id="overlay">' +
-    //        '<img id="loading" src="http://bit.ly/pMtW1K" >' +
-    //        '</div>';
-    //    //$(over).appendTo('body');
-    //    $('body').append(over);
-    //    $('html, body').css("cursor", "wait");
-    //    console.log("creating overlay");
-    //}
-    //else if (action == "off") {
-    //    $("#overlay").remove();
-    //    $('html, body').css("cursor", "auto");
-    //    console.log("removing overlay");
-
-    //}
-};
 
 export class ProductsList extends React.Component<IProductsListProps, IProductsListState> {
 
     constructor(props) {
         super(props);
-        this.state = {
-            loadingFlag: true
-        };
     }
 
     componentWillMount() {
-        //this.props.onUpdate();
-        //console.log('update');
     }
 
     componentDidMount() {
         //setting initiall values
         //attach the scroll event listener to our scroll handler function
-        window.addEventListener("scroll", (e) => { this.handleScroll(); });
-
-        //to load comments initially
-        loading("on");
+        window.addEventListener("scroll", (e) => { this.handleScroll(e); });
     }
 
-    handleScroll() {
-        var em = document.getElementById("products");
-        var height = em.clientHeight;
-        var top = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+    componentDidUpdate() {
+        if (this.props.isLoading) {
+            this.unloadScrollBars();
+        } else {
+            this.reloadScrollBars();
+        }
+    }
 
-        var offSetBottom = height / (2.5 * this.props.page);
-        var offSetTop = height - offSetBottom;
+    private reloadScrollBars() {
+        document.documentElement.style.overflow = 'auto';  // firefox, chrome
+        (document.body as any).scroll = "yes"; // ie only
+    }
 
-        //console.log('----- top ' + top + '------');
-        //console.log('offSetBottom: ' + offSetBottom + '; offSetTop: ' + offSetTop);
-        //console.log('height: ' + height + '; page: ' + this.props.page);
-        //console.log('loading: ' + this.props.forward)
-        //console.log('----------------');
+    private unloadScrollBars() {
+        document.documentElement.style.overflow = 'hidden';  // firefox, chrome
+        (document.body as any).scroll = "no"; // ie only
+    }
 
-        console.log('top ' + top + '--' + height + '--' + offSetBottom + '--' + offSetTop + '---' + (top > offSetTop) + '/' + !this.props.forward);
-        if (top > offSetTop && !this.props.forward) { //this.state.loadingFlag) {
-            console.log('----- top ' + top + '------');
-            console.log('offSetBottom: ' + offSetBottom + '; offSetTop: ' + offSetTop);
-            console.log('height: ' + height + '; page: ' + this.props.page);
-            console.log('loading: ' + this.props.forward)
-            console.log('----------------');
+    handleScroll(e) {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            console.log('bottom reached! window.innerHeight: ' + window.innerHeight + '/ window.scrollY: ' + window.scrollY + ' / document.body.offsetHeight: ' + document.body.offsetHeight);
             this.props.onPageChanged();
         }
     }

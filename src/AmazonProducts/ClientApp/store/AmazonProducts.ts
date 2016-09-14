@@ -8,6 +8,7 @@ import { ActionCreator } from './';
 export interface AmazonProductsState {
     isLoading: boolean;
     page: number;
+    pagingFinished: boolean;
     forward: number;
     keywords: string;
     currency: string;
@@ -128,6 +129,7 @@ export const actionCreators = {
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 const unloadedState: AmazonProductsState = {
     page: 0,
+    pagingFinished: false,
     forward: 0,
     keywords: null,
     currency: null,
@@ -140,6 +142,7 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
     if (isActionType(action, RequestAmazonProducts)) {
         return {
             page: action.page,
+            pagingFinished: state.pagingFinished,
             forward: state.forward,
             keywords: action.keywords,
             currency: action.currency,
@@ -152,9 +155,12 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
         // handle out-of-order responses.
         if (action.page === state.page && action.currency == state.currency && action.keywords == state.keywords) {
             var response = action.response;
-            response.responseArray = state.response.responseArray.concat(response.responseArray);
+            var itemsReceivedLength = response.responseArray.length;
+            if (action.page > 1)
+                response.responseArray = state.response.responseArray.concat(response.responseArray);
             return {
                 page: action.page,
+                pagingFinished: itemsReceivedLength === 0,
                 forward: state.forward,
                 keywords: action.keywords,
                 currency: action.currency,
@@ -166,6 +172,7 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
     } else if (isActionType(action, RequestCurrencies)) {
         return {
             page: state.page,
+            pagingFinished: state.pagingFinished,
             forward: state.forward,
             keywords: state.keywords,
             currency: state.currency,
@@ -174,10 +181,9 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
             isLoading: true
         };
     } else if (isActionType(action, ReceiveCurrencies)) {
-        // Only accept the incoming data if it matches the most recent request. This ensures we correctly
-        // handle out-of-order responses.
         return {
             page: state.page,
+            pagingFinished: state.pagingFinished,
             forward: state.forward,
             keywords: state.keywords,
             currency: state.currency,
@@ -186,10 +192,9 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
             isLoading: false
         };
     } else if (isActionType(action, ChangePage)) {
-        // Only accept the incoming data if it matches the most recent request. This ensures we correctly
-        // handle out-of-order responses.
         return {
             page: state.page,
+            pagingFinished: state.pagingFinished,
             forward: action.page,
             keywords: state.keywords,
             currency: state.currency,

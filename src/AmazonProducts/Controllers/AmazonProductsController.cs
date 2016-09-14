@@ -35,7 +35,7 @@ namespace AmazonProducts.Controllers
         #region Actions
 
         [HttpGet("[action]")]
-        public async Task<AmazonResponse> Products(string keywords, string currency, int page = 1)
+        public async Task<AmazonResponse> Products(string keywords, string currency = "USD", int page = 1)
         {
             string associateTag = _setting.AssociateTag;
             string awsAccessKeyId = _setting.AccessKeyId;

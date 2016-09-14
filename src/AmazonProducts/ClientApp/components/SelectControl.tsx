@@ -7,20 +7,27 @@ interface ISelectControlProps {
 
 export class SelectControl extends React.Component<ISelectControlProps, void> {
 
+    private _select: any;
+
     constructor(props: ISelectControlProps) {
         super(props);
-    }
-
-    componentDidMount() {
     }
 
     change(event) {
         this.props.onChange(event.target.value);
     }
 
+    public getValue(): string {
+        return this._select.value;
+    }
+
+    public setValue(value: string) {
+        this._select.value = value;
+    }
+
     public render() {
         return <div>
-            <select onChange={(e) => this.change(e) }>
+            <select onChange={(e) => this.change(e) } ref={(c) => this._select = c}>
                 { this.props.options.map((option) => <option value={option.value}>{option.name}</option>) }
             </select>
         </div>;
