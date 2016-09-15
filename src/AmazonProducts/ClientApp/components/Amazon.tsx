@@ -48,7 +48,7 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
         let { location } = this.props as any;
         let { query } = location;
         let keywords = query.keywords || '';
-        let currency = query.currency || '';
+        let currency = query.currency || 'USD';
         let page = parseInt(query.page) || 1;
         this.props.setPage(page);
         if (keywords !== '')
@@ -60,7 +60,7 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
         let { location } = this.props as any;
         let { query } = location;
         let keywords = query.keywords || '';
-        let currency = query.currency || '';
+        let currency = query.currency || 'USD';
 
         if (this._keywordsInput.value !== keywords) {
             this._keywordsInput.value = keywords;
@@ -74,7 +74,7 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
     componentDidUpdate() {
         this.setLoaderOffset();
 
-        if (this.props.pagingFinished) {
+        if (this.props.requestProducts.length > 0 && this.props.pagingFinished) {
             this._modalControl.open();
         }
     }
@@ -91,9 +91,10 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
         let { location } = nextProps as any;
         let { query } = location;
         let keywords = query.keywords || '';
-        let currency = query.currency || '';
+        let currency = query.currency || 'USD';
         let page = nextProps.forward;
-        this.props.requestProducts(keywords, currency, page);
+        if (keywords !== '')
+            this.props.requestProducts(keywords, currency, page);
         this.props.requestCurrencies();
     }
 
