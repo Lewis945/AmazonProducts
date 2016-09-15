@@ -85,6 +85,13 @@ class ChangePage extends Action {
     }
 }
 
+@typeName("CLEAR_PRODUCTS_LIST")
+class ClearProductsList extends Action {
+    constructor() {
+        super();
+    }
+}
+
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
@@ -122,6 +129,9 @@ export const actionCreators = {
     },
     goForward: (): ActionCreator => (dispatch, getState) => {
         dispatch(new ChangePage(getState().products.page + 1));
+    },
+    clearProductsList: (): ActionCreator => (dispatch, getState) => {
+        dispatch(new ClearProductsList());
     }
 };
 
@@ -199,6 +209,17 @@ export const reducer: Reducer<AmazonProductsState> = (state, action) => {
             keywords: state.keywords,
             currency: state.currency,
             response: state.response,
+            currencies: state.currencies,
+            isLoading: false
+        };
+    } else if (isActionType(action, ClearProductsList)) {
+        return {
+            page: 1,
+            pagingFinished: false,
+            forward: 1,
+            keywords: '',
+            currency: '',
+            response: defaultResponse,
             currencies: state.currencies,
             isLoading: false
         };

@@ -6,7 +6,5 @@ import Amazon from './components/Amazon';
 
 export default <Route component={ Layout }>
     <Route path='/' components={{ body: Home }} />
-    <Route path='/amazon' components={{ body: Amazon }}>
-        <Route path='(:keywords)/(:startDateIndex)' /> { /* Optional route segment that does not affect NavMenu highlighting */ }
-    </Route>
+    <Route path='/amazon' components={{ body: Amazon }}/>
 </Route>;

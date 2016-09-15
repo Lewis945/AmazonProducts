@@ -51,9 +51,13 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
         let currency = query.currency || 'USD';
         let page = parseInt(query.page) || 1;
         this.props.setPage(page);
-        if (keywords !== '')
+        if (keywords != '')
             this.props.requestProducts(keywords, currency, page);
         this.props.requestCurrencies();
+
+        if (keywords == '' && query.currency == null && query.page == null && this.props.response.responseArray.length > 0) {
+            this.props.clearProductsList();
+        }
     }
 
     componentDidMount() {
@@ -73,7 +77,6 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
 
     componentDidUpdate() {
         this.setLoaderOffset();
-
         if (this.props.requestProducts.length > 0 && this.props.pagingFinished) {
             this._modalControl.open();
         }
@@ -93,8 +96,15 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
         let keywords = query.keywords || '';
         let currency = query.currency || 'USD';
         let page = nextProps.forward;
-        if (keywords !== '')
+
+        if (keywords !== '' && query.currency == null && query.page == null) {
+            this.props.clearProductsList();
+        }
+
+        if (keywords !== '') {
             this.props.requestProducts(keywords, currency, page);
+        }
+
         this.props.requestCurrencies();
     }
 
@@ -110,7 +120,6 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
             { this.props.isLoading ? <div className="loader-layout"></div> : '' }
             { this.props.isLoading ? <div id="amazon-loader" className="loader">Loading...</div> : '' }
             <h1>Amazon products list</h1>
-            <span>Keywords: </span> <span>{this.props.response.keywords} </span> <br/>
             <span>Search: </span><input type="input" ref={(c) => this._keywordsInput = c}/> <a href="#" onClick={ (e) => { this.submitKeywords(); e.preventDefault(); } }>Search</a>
             <SelectControl onChange={(v) => this.submitCurrency(v) } options={this.props.currencies} ref={(c) => this._selectControl = c}/>
             <ProductsList
