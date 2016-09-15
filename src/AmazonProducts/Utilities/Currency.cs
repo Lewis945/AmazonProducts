@@ -1,5 +1,8 @@
 ﻿namespace AmazonProducts.Utilities
 {
+    /// <summary>
+    /// Represents available currencies.
+    /// </summary>
     public enum Currency
     {
         /// <summary>

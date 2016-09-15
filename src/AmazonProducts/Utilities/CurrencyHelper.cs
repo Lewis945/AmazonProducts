@@ -1,19 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace AmazonProducts.Utilities
 {
+    /// <summary>
+    /// Represents currency utilities.
+    /// </summary>
     public class CurrencyHelper
     {
+        #region .ctor
+
+        /// <summary>
+        /// Instantiates currenct helper.
+        /// </summary>
         public CurrencyHelper()
         {
-
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Converts price from one currency to another.
+        /// </summary>
+        /// <param name="amount">Price value.</param>
+        /// <param name="fromCurrency"><see cref="Currency"/> value of initial currency.</param>
+        /// <param name="toCurrency"><see cref="Currency"/> value of resulting currency.</param>
+        /// <returns><see cref="decimal"/> converted value.</returns>
         public async Task<decimal> CurrencyConversionAsync(decimal amount, Currency fromCurrency, Currency toCurrency)
         {
             decimal output = 0;
@@ -41,5 +56,7 @@ namespace AmazonProducts.Utilities
 
             return output;
         }
+
+        #endregion
     }
 }
