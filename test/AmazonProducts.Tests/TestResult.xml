@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<test-run id="0" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="1" portable-engine-version="3.3.0.0" start-time="2016-09-15 17:37:32Z" end-time="2016-09-15 17:37:32Z" duration="0.251005">
+  <test-suite type="Assembly" id="1002" name="AmazonProducts.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" fullname="AmazonProducts.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" runstate="Runnable" testcasecount="1" result="Passed" start-time="2016-09-15 17:37:32Z" end-time="2016-09-15 17:37:32Z" duration="0.091469" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="1">
+    <settings>
+      <setting name="WorkDirectory" value="D:\AmazonProducts\test\AmazonProducts.Tests" />
+    </settings>
+    <test-suite type="TestSuite" id="1003" name="AmazonProducts" fullname="AmazonProducts" runstate="Runnable" testcasecount="1" result="Passed" start-time="2016-09-15 17:37:32Z" end-time="2016-09-15 17:37:32Z" duration="0.081539" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="1">
+      <test-suite type="TestSuite" id="1004" name="Tests" fullname="AmazonProducts.Tests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2016-09-15 17:37:32Z" end-time="2016-09-15 17:37:32Z" duration="0.081149" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="1">
+        <test-suite type="TestFixture" id="1000" name="UnitTest1" fullname="AmazonProducts.Tests.UnitTest1" classname="AmazonProducts.Tests.UnitTest1" runstate="Runnable" testcasecount="1" result="Passed" start-time="2016-09-15 17:37:32Z" end-time="2016-09-15 17:37:32Z" duration="0.076530" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="1">
+          <test-case id="1001" name="TestMethod1" fullname="AmazonProducts.Tests.UnitTest1.TestMethod1" methodname="TestMethod1" classname="AmazonProducts.Tests.UnitTest1" runstate="Runnable" seed="1489071714" result="Passed" start-time="2016-09-15 17:37:32Z" end-time="2016-09-15 17:37:32Z" duration="0.018935" asserts="1" />
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

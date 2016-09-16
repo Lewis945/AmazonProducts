@@ -13,8 +13,6 @@ interface RouteParams {
     page: string;
 }
 
-//---------------
-
 interface IRouter {
     replaceWith(path: string);
     transitionTo(path: string, query: Object);
@@ -26,14 +24,9 @@ interface IRouterContext {
     router: IRouter;
 }
 
-interface ISomeOtherContext {
-}
-
-//---------------
-
 class AmazonProducts extends React.Component<AmazonProductsProps, any> {
 
-    context: IRouterContext & ISomeOtherContext;
+    context: IRouterContext;
 
     private _keywordsInput: HTMLInputElement;
     private _selectControl: SelectControl;
@@ -43,7 +36,7 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
         router: React.PropTypes.func.isRequired
     }
 
-    componentWillMount() {
+    public componentWillMount() {
         // This method runs when the component is first added to the page
         let { location } = this.props as any;
         let { query } = location;
@@ -60,7 +53,7 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
         }
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         let { location } = this.props as any;
         let { query } = location;
         let keywords = query.keywords || '';
@@ -75,21 +68,14 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
         this.setLoaderOffset();
     }
 
-    componentDidUpdate() {
+    public componentDidUpdate() {
         this.setLoaderOffset();
-        if (this.props.requestProducts.length > 0 && this.props.pagingFinished) {
+        if (this.props.response.responseArray.length > 0 && this.props.pagingFinished) {
             this._modalControl.open();
         }
     }
 
-    private setLoaderOffset() {
-        if (this.props.isLoading) {
-            var loader = document.getElementById("amazon-loader");
-            loader.style.top = (window.innerHeight / 2 + window.scrollY - 150) + "px";
-        }
-    }
-
-    componentWillReceiveProps(nextProps: AmazonProductsProps) {
+    public componentWillReceiveProps(nextProps: AmazonProductsProps) {
         // This method runs when incoming props (e.g., route params) change
         let { location } = nextProps as any;
         let { query } = location;
@@ -119,9 +105,12 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
         return <div>
             { this.props.isLoading ? <div className="loader-layout"></div> : '' }
             { this.props.isLoading ? <div id="amazon-loader" className="loader">Loading...</div> : '' }
-            <h1>Amazon products list</h1>
-            <span>Search: </span><input type="input" ref={(c) => this._keywordsInput = c}/> <a href="#" onClick={ (e) => { this.submitKeywords(); e.preventDefault(); } }>Search</a>
-            <SelectControl onChange={(v) => this.submitCurrency(v) } options={this.props.currencies} ref={(c) => this._selectControl = c}/>
+            <h1 style={{ float: 'left' }}>Amazon products list</h1>
+            <div style={{ float: 'right', "margin-top": "30px" }}>
+                <input type="input" ref={(c) => this._keywordsInput = c} className="search-input"/>
+                <a href="#" onClick={ (e) => { this.submitKeywords(); e.preventDefault(); } } className="search-btn">Search</a>
+                <div className="select-container"><SelectControl onChange={(v) => this.submitCurrency(v) } options={this.props.currencies} ref={(c) => this._selectControl = c}/></div>
+            </div>
             <ProductsList
                 page={this.props.page}
                 forward={this.props.isLoading}
@@ -131,10 +120,17 @@ class AmazonProducts extends React.Component<AmazonProductsProps, any> {
             <ModalControl
                 ref={(c) => this._modalControl = c}
                 modalId={"amazon-modal"}
-                title={"Error"}
-                body={"<p>Amazon allows to get only 5 pages for All items search with keywords.<p/>"}
+                title={<h3>Error</h3>}
+                body={<p>Amazon allows to get only 5 pages for All items search with keywords.</p>}
                 closeBtnId={"amz-close"} />
         </div>;
+    }
+
+    private setLoaderOffset() {
+        if (this.props.isLoading) {
+            var loader = document.getElementById("amazon-loader");
+            loader.style.top = (window.innerHeight / 2 + window.scrollY - 150) + "px";
+        }
     }
 
     private submitKeywords() {

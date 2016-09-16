@@ -1,13 +1,32 @@
-﻿.main-nav li .glyphicon {
-    margin-right: 10px;
+﻿.search-input {
+    padding: 1px 5px 1px 5px;
 }
 
-/* Highlighting rules for nav menu items */
-.main-nav li a.active,
-.main-nav li a.active:hover,
-.main-nav li a.active:focus {
-    background-color: #4189C7;
+.search-btn {
+    float: right;
+    margin: 0 0 0 5px;
+    background-color: #555555;
+    display: block;
+    padding: 3px 10px;
+    text-align: center;
+    border-radius: 5px;
     color: white;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover, &:visited, &:active, &:focus {
+        text-decoration: none;
+        color: white;
+    }
+
+    &:hover {
+        background-color: rgba(85, 85, 85, 0.5);
+    }
+}
+
+.select-container {
+    float: left;
+    margin: 0px 5px 0 0;
 }
 
 /* Keep the nav menu independent of scrolling and on top of other items */
@@ -17,6 +36,22 @@
     left: 0;
     right: 0;
     z-index: 1;
+
+    li {
+        .glyphicon {
+            margin-right: 10px;
+        }
+
+        a {
+            &.active {
+                /* Highlighting rules for nav menu items */
+                &:hover, &:focus {
+                    background-color: #4189C7;
+                    color: white;
+                }
+            }
+        }
+    }
 }
 
 @media (max-width: 767px) {
@@ -31,44 +66,44 @@
     .main-nav {
         height: 100%;
         width: calc(25% - 20px);
-    }
 
-    .main-nav .navbar {
-        border-radius: 0px;
-        border-width: 0px;
-        height: 100%;
-    }
+        .navbar {
+            border-radius: 0px;
+            border-width: 0px;
+            height: 100%;
 
-    .main-nav .navbar-header {
-        float: none;
-    }
+            ul {
+                float: none;
+            }
 
-    .main-nav .navbar-collapse {
-        border-top: 1px solid #444;
-        padding: 0px;
-    }
+            li {
+                float: none;
+                font-size: 15px;
+                margin: 6px;
 
-    .main-nav .navbar ul {
-        float: none;
-    }
+                a {
+                    padding: 10px 16px;
+                    border-radius: 4px;
+                }
+            }
 
-    .main-nav .navbar li {
-        float: none;
-        font-size: 15px;
-        margin: 6px;
-    }
+            a {
+                /* If a menu item's text is too long, truncate it */
+                width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
 
-    .main-nav .navbar li a {
-        padding: 10px 16px;
-        border-radius: 4px;
-    }
+        .navbar-header {
+            float: none;
+        }
 
-    .main-nav .navbar a {
-        /* If a menu item's text is too long, truncate it */
-        width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        .navbar-collapse {
+            border-top: 1px solid #444;
+            padding: 0px;
+        }
     }
 }
 
@@ -204,27 +239,37 @@
     float: right;
     font-size: 28px;
     font-weight: bold;
-}
+    margin-top: 10px !important;
 
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+    &:hover,
+    &:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
 }
 
 .modal-header {
     padding: 2px 16px;
     background-color: #5cb85c;
     color: white;
+
+    h1, h2, h3 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
 }
 
 .modal-body {
     padding: 2px 16px;
+
+    p {
+        margin: 0;
+    }
 }
 
 .modal-footer {
-    padding: 2px 16px;
+    padding: 0;
     background-color: #5cb85c;
     color: white;
 }

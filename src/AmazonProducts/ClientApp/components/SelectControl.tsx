@@ -13,7 +13,7 @@ export class SelectControl extends React.Component<ISelectControlProps, void> {
         super(props);
     }
 
-    change(event) {
+    public change(event) {
         this.props.onChange(event.target.value);
     }
 
@@ -27,7 +27,7 @@ export class SelectControl extends React.Component<ISelectControlProps, void> {
 
     public render() {
         return <div>
-            <select onChange={(e) => this.change(e) } ref={(c) => this._select = c}>
+            <select onChange={(e) => this.change(e) } ref={(c) => this._select = c} style={{ padding: "3px" }}>
                 { this.props.options.map((option) => <option value={option.value}>{option.name}</option>) }
             </select>
         </div>;

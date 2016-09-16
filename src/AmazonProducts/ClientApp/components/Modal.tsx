@@ -3,14 +3,13 @@
 interface IModalProps {
     modalId: string;
     buttonId?: string;
-    title: string;
-    body: string;
+    title: JSX.Element;
+    body: JSX.Element;
     footer?: string;
     closeBtnId: string;
 }
 
 export class ModalControl extends React.Component<IModalProps, void> {
-
     private _modal: any;
     private _btn: any;
 
@@ -50,11 +49,11 @@ export class ModalControl extends React.Component<IModalProps, void> {
         }
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this._init();
     }
 
-    componentDidUpdate() {
+    public componentDidUpdate() {
         this._init();
     }
 
@@ -67,16 +66,15 @@ export class ModalControl extends React.Component<IModalProps, void> {
     }
 
     public render() {
-        let body = this.props.body;
-        function getBody() { return { __html: body }; };
         function getCross() { return { __html: "&#10006" }; };
         return <div id={this.props.modalId} className="modal">
             <div className="modal-content">
                 <div className="modal-header">
                     <span className="close" id={this.props.closeBtnId} dangerouslySetInnerHTML={getCross()}></span>
-                    <h2>{this.props.title}</h2>
+                    {this.props.title}
                 </div>
-                <div className="modal-body" dangerouslySetInnerHTML={getBody() }>
+                <div className="modal-body">
+                    {this.props.body}
                 </div>
                 <div className="modal-footer">
                     {this.props.footer !== null ? this.props.footer : ''}
